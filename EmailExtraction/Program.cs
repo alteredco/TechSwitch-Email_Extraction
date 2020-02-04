@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Net;
+using System.Text.RegularExpressions;
 
 namespace EmailExtraction
 {
@@ -8,21 +9,41 @@ namespace EmailExtraction
     {
         public static void Main(string[] args)
         {
-
-            string fullText = ReadText();
-            foreach (var letter in fullText)
+            Regex rx = new Regex(@"@softwire\.com", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            if (ReadText(out string fullText))
             {
-                 Console.Write(letter);
+                CountInstance(rx, fullText);
+                Console.ReadLine();
             }
-            Console.ReadLine();
 
         }
 
-        private static string ReadText()
+        private static Boolean ReadText(out string text)
         {
             string path = @"C:\Users\WenKak\Desktop\Training\EmailExtraction\scanText.txt";
-            string fullText = File.ReadAllText(path);
-            return fullText;
+            try
+            {
+                text = File.ReadAllText(path);
+                return true;
+            }
+            catch(IOException e)
+            {
+                Console.WriteLine("There was a problem!" + e.Message);
+                text = "";
+                return false;
+            }
+        }
+
+        private static void CountInstance(Regex rx, string fullText)
+        {
+            MatchCollection matches = rx.Matches(fullText);
+            Console.WriteLine($"{matches.Count} matches found in: \n {fullText}");
+            // foreach (var letter in fullText)
+            // {
+            //     {
+            //         Console.Write(letter);
+            //     }
+            // }
         }
         
     }
