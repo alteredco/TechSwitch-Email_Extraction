@@ -9,7 +9,7 @@ namespace EmailExtraction
     {
         public static void Main(string[] args)
         {
-            Regex rx = new Regex(@"@softwire\.com", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            Regex rx = new Regex(@"\w*?\.?\w*@softwire.com\s", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             if (ReadText(out string fullText))
             {
                 CountInstance(rx, fullText);
@@ -37,13 +37,16 @@ namespace EmailExtraction
         private static void CountInstance(Regex rx, string fullText)
         {
             MatchCollection matches = rx.Matches(fullText);
+            
+            
             Console.WriteLine($"{matches.Count} matches found in: \n {fullText}");
-            // foreach (var letter in fullText)
-            // {
-            //     {
-            //         Console.Write(letter);
-            //     }
-            // }
+            foreach (Match letter in matches)
+            {
+                Group domain = letter.Groups[0];
+                {
+                    Console.Write(domain);
+                }
+            }
         }
         
     }
